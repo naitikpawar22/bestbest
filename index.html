@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .slider-container {
+            width: 95%;
+            max-width: 900px;
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 15px;
+            transition: transform 0.6s, box-shadow 0.6s;
+            object-fit: contain;
+        }
+
+        /* 🔥 Hover Effects */
+        .slide img:hover {
+            transform: scale(1.08) rotate(1deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* 🔥 Navigation Buttons */
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            color: #000;
+            font-size: 2.5rem;
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.4s;
+            backdrop-filter: blur(5px);
+        }
+
+        .prev:hover, .next:hover {
+            background: #ff758c;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0px 10px 20px rgba(255, 117, 140, 0.4);
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        /* 📱 Mobile Responsive */
+        @media (max-width: 768px) {
+            .slide img { max-height: 350px; }
+            .prev, .next { font-size: 1.8rem; padding: 6px 12px; }
+        }
+
+        /* 🌟 Fade Animation */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0.5; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container" id="sliderContainer">
+        <div class="slider" id="slider">
+            <script>
+                for (let i = 1; i <= 24; i++) {
+                    document.write(`<div class="slide fade-in"><img src="images/${i}.jpg" alt="Image ${i}"></div>`);
+                }
+            </script>
+        </div>
+        <span class="prev" onclick="changeSlide(-1)">&#10094;</span>
+        <span class="next" onclick="changeSlide(1)">&#10095;</span>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const slider = document.getElementById("slider");
+        const slides = document.querySelectorAll(".slide");
+
+        function changeSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = slides.length - 1;
+            if (currentIndex >= slides.length) currentIndex = 0;
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        // 🔄 Auto-slide
+        setInterval(() => changeSlide(1), 3500);
+
+        // 📱 Swipe Support
+        let startX = 0;
+        sliderContainer.addEventListener("touchstart", e => {
+            startX = e.touches[0].clientX;
+        });
+
+        sliderContainer.addEventListener("touchend", e => {
+            const endX = e.changedTouches[0].clientX;
+            if (startX > endX + 50) changeSlide(1);   // Swipe Left
+            if (startX < endX - 50) changeSlide(-1);  // Swipe Right
+        });
+    </script>
+
+</body>
+</html>
