@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>For My Favorite Person 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            /* Beautiful gradient background */
+            background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fbc2eb);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            max-height: 640px;
+            /* Frosted glass effect */
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            padding: 18px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .title-main {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .title-sub {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .heart {
+            font-size: 1.3rem;
+            animation: pulse 1.4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .slideshow {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 70px);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .slide-img-wrapper {
+            width: 100%;
+            height: 70%;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            /* Initial slight zoom out */
+            transform: scale(1.00); 
+            transition: transform 5s ease-out; /* Increase duration for smoother effect (Ken Burns) */
+        }
+
+        .slide.active img {
+            /* Smooth Ken Burns effect (subtle zoom in) */
+            transform: scale(1.05); 
+        }
+
+        .caption {
+            margin-top: 16px;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .caption span {
+            font-weight: 600;
+        }
+
+        .counter {
+            margin-top: 4px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .controls {
+            position: absolute;
+            inset: auto 0 14px 0;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            pointer-events: none;
+        }
+
+        .btn {
+            pointer-events: auto;
+            background: rgba(0,0,0,0.4);
+            border-radius: 999px;
+            padding: 8px 15px;
+            border: 1px solid rgba(255,255,255,0.35);
+            font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(0,0,0,0.65);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: 88vh;
+            }
+            .slide-img-wrapper {
+                height: 65%;
+            }
+            .caption {
+                font-size: 0.9rem;
+            }
+            .header {
+                padding: 14px 18px;
+            }
+            .title-main {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div>
+                <div class="title-main">For My Favorite Person</div>
+                <div class="title-sub">20 little reasons why you make my world better 💫</div>
+            </div>
+            <div class="heart">❤️</div>
+        </header>
+
+        <div class="slideshow" id="slideshow">
+
+            <!-- 1 -->
+            <div class="slide active">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FFB6C1/333333?text=Memory+1" alt="Photo 1">
+                </div>
+                <p class="caption">
+                    <span>Reason 1:</span> Every time you smile, my brain forgets how to act normal.
+                </p>
+                <p class="counter">1 / 20</p>
+            </div>
+
+            <!-- 2 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/F08080/FFFFFF?text=Memory+2" alt="Photo 2">
+                </div>
+                <p class="caption">
+                    <span>Reason 2:</span> I wasn’t ready to like someone this much… and then you happened.
+                </p>
+                <p class="counter">2 / 20</p>
+            </div>
+
+            <!-- 3 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FF69B4/FFFFFF?text=Memory+3" alt="Photo 3">
+                </div>
+                <p class="caption">
+                    <span>Reason 3:</span> Low battery, bad day, tired mood—still have energy to text you. 😉
+                </p>
+                <p class="counter">3 / 20</p>
+            </div>
+
+            <!-- 4 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/CD5C5C/FFFFFF?text=Memory+4" alt="Photo 4">
+                </div>
+                <p class="caption">
+                    <span>Reason 4:</span> You’re my favorite notification.
+                </p>
+                <p class="counter">4 / 20</p>
+            </div>
+
+            <!-- 5 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FFA07A/333333?text=Memory+5" alt="Photo 5">
+                </div>
+                <p class="caption">
+                    <span>Reason 5:</span> If being cute was a subject, you’d top the class every year.
+                </p>
+                <p class="counter">5 / 20</p>
+            </div>
+
+            <!-- 6 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/DC143C/FFFFFF?text=Memory+6" alt="Photo 6">
+                </div>
+                <p class="caption">
+                    <span>Reason 6:</span> I like “us”. Whatever we are, it feels right.
+                </p>
+                <p class="counter">6 / 20</p>
+            </div>
+
+            <!-- 7 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FFC0CB/333333?text=Memory+7" alt="Photo 7">
+                </div>
+                <p class="caption">
+                    <span>Reason 7:</span> My favorite place is any place where I get to stand next to you.
+                </p>
+                <p class="counter">7 / 20</p>
+            </div>
+
+            <!-- 8 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/E9967A/FFFFFF?text=Memory+8" alt="Photo 8">
+                </div>
+                <p class="caption">
+                    <span>Reason 8:</span> You’re not just my crush, you’re my calm.
+                </p>
+                <p class="counter">8 / 20</p>
+            </div>
+
+            <!-- 9 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FA8072/FFFFFF?text=Memory+9" alt="Photo 9">
+                </div>
+                <p class="caption">
+                    <span>Reason 9:</span> I could look at you and forget the whole world for a bit.
+                </p>
+                <p class="counter">9 / 20</p>
+            </div>
+
+            <!-- 10 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/DB7093/333333?text=Memory+10" alt="Photo 10">
+                </div>
+                <p class="caption">
+                    <span>Reason 10:</span> You’re accidentally everything I ever wanted.
+                </p>
+                <p class="counter">10 / 20</p>
+            </div>
+
+            <!-- 11 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FF7F50/FFFFFF?text=Memory+11" alt="Photo 11">
+                </div>
+                <p class="caption">
+                    <span>Reason 11:</span> I hope you realize how easy it is for me to choose you.
+                </p>
+                <p class="counter">11 / 20</p>
+            </div>
+
+            <!-- 12 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FFDAB9/333333?text=Memory+12" alt="Photo 12">
+                </div>
+                <p class="caption">
+                    <span>Reason 12:</span> Your laugh? Underrated national treasure.
+                </p>
+                <p class="counter">12 / 20</p>
+            </div>
+
+            <!-- 13 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/F0E68C/333333?text=Memory+13" alt="Photo 13">
+                </div>
+                <p class="caption">
+                    <span>Reason 13:</span> Somehow you make the most ordinary moments feel special.
+                </p>
+                <p class="counter">13 / 20</p>
+            </div>
+
+            <!-- 14 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/ADD8E6/333333?text=Memory+14" alt="Photo 14">
+                </div>
+                <p class="caption">
+                    <span>Reason 14:</span> I don’t believe in “perfect” but you keep changing my mind.
+                </p>
+                <p class="counter">14 / 20</p>
+            </div>
+
+            <!-- 15 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/90EE90/333333?text=Memory+15" alt="Photo 15">
+                </div>
+                <p class="caption">
+                    <span>Reason 15:</span> My day is 10x better when I talk to you.
+                </p>
+                <p class="counter">15 / 20</p>
+            </div>
+
+            <!-- 16 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/DDA0DD/FFFFFF?text=Memory+16" alt="Photo 16">
+                </div>
+                <p class="caption">
+                    <span>Reason 16:</span> You’re my favorite “what if we actually ended up together?” thought.
+                </p>
+                <p class="counter">16 / 20</p>
+            </div>
+
+            <!-- 17 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/BA55D3/FFFFFF?text=Memory+17" alt="Photo 17">
+                </div>
+                <p class="caption">
+                    <span>Reason 17:</span> I don’t flirt with everyone… you’re a limited edition case. 😏
+                </p>
+                <p class="counter">17 / 20</p>
+            </div>
+
+            <!-- 18 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FFB6C1/333333?text=Memory+18" alt="Photo 18">
+                </div>
+                <p class="caption">
+                    <span>Reason 18:</span> If I randomly smile at my phone, 99% chances it’s because of you.
+                </p>
+                <p class="counter">18 / 20</p>
+            </div>
+
+            <!-- 19 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/F08080/FFFFFF?text=Memory+19" alt="Photo 19">
+                </div>
+                <p class="caption">
+                    <span>Reason 19:</span> I like you a little more than I planned to. Okay, a lot more.
+                </p>
+                <p class="counter">19 / 20</p>
+            </div>
+
+            <!-- 20 -->
+            <div class="slide">
+                <div class="slide-img-wrapper">
+                    <img src="https://placehold.co/800x600/FF69B4/FFFFFF?text=Memory+20" alt="Photo 20">
+                </div>
+                <p class="caption">
+                    <span>Reason 20:</span> Long story short: you + me = should hang out more. 💌
+                </p>
+                <p class="counter">20 / 20</p>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="btn" id="prevBtn">⟵ Back</button>
+                <button class="btn" id="nextBtn">Next ⟶</button>
+            </div>
+
+            <!-- Dots -->
+            <div class="dots" id="dots"></div>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll(".slide");
+        const dotsContainer = document.getElementById("dots");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        let currentIndex = 0;
+        let autoSlideInterval;
+
+        // Create dots dynamically
+        slides.forEach((_, i) => {
+            const dot = document.createElement("div");
+            dot.classList.add("dot");
+            if (i === 0) dot.classList.add("active");
+            dot.dataset.index = i;
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll(".dot");
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle("active", i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === index);
+            });
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            // Start auto-sliding only if there is more than one slide
+            if (slides.length > 1) {
+              autoSlideInterval = setInterval(nextSlide, 5000); // 5 seconds
+            }
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) clearInterval(autoSlideInterval);
+        }
+
+        nextBtn.addEventListener("click", () => {
+            nextSlide();
+            startAutoSlide(); // Restart timer on manual navigation
+        });
+
+        prevBtn.addEventListener("click", () => {
+            prevSlide();
+            startAutoSlide(); // Restart timer on manual navigation
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener("click", () => {
+                const i = parseInt(dot.dataset.index, 10);
+                showSlide(i);
+                startAutoSlide(); // Restart timer on manual navigation
+            });
+        });
+
+        // Initialize and Start
+        window.onload = function() {
+            showSlide(0); // Ensure the first slide is active on load
+            startAutoSlide();
+        };
+    </script>
+</body>
+</html>
