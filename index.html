@@ -25,6 +25,8 @@
             justify-content: center;
             color: #fff;
             overflow: hidden;
+            /* Prevents horizontal scrolling during swipe attempts */
+            touch-action: pan-y; 
         }
 
         .container {
@@ -166,6 +168,13 @@
             transform: translateY(-1px);
             background: rgba(0,0,0,0.65);
             box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        /* Added active state for better mobile touch feedback */
+        .btn:active {
+            transform: translateY(1px);
+            background: rgba(0,0,0,0.8);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
         }
 
         .dots {
@@ -455,12 +464,16 @@
 
     <script>
         const slides = document.querySelectorAll(".slide");
+        const slideshowEl = document.getElementById("slideshow");
         const dotsContainer = document.getElementById("dots");
         const prevBtn = document.getElementById("prevBtn");
         const nextBtn = document.getElementById("nextBtn");
 
         let currentIndex = 0;
         let autoSlideInterval;
+        let touchstartX = 0;
+        let touchendX = 0;
+        const swipeThreshold = 50; // Minimum distance to register a swipe
 
         // Create dots dynamically
         slides.forEach((_, i) => {
@@ -504,6 +517,52 @@
         function stopAutoSlide() {
             if (autoSlideInterval) clearInterval(autoSlideInterval);
         }
+
+        // -----------------------------------------------------------
+        // SWIPE LOGIC
+        // -----------------------------------------------------------
+
+        slideshowEl.addEventListener('touchstart', e => {
+            // Record initial touch position
+            touchstartX = e.changedTouches[0].screenX;
+            stopAutoSlide(); // Pause auto-slide when user interacts
+        }, false);
+
+        slideshowEl.addEventListener('touchend', e => {
+            // Record end touch position
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipeGesture();
+            startAutoSlide(); // Resume auto-slide after interaction
+        }, false);
+        
+        // This is necessary to prevent scrolling while swiping horizontally
+        slideshowEl.addEventListener('touchmove', e => {
+            // Optional: You could use e.preventDefault() here if you ONLY want horizontal swipes, 
+            // but this can interfere with vertical scrolling on some mobile browsers.
+            // Since `touch-action: pan-y` is set on the body, it helps prevent scroll.
+        }, false);
+
+        function handleSwipeGesture() {
+            const diff = touchstartX - touchendX;
+
+            if (Math.abs(diff) < swipeThreshold) {
+                // Not enough distance to be a swipe
+                return;
+            }
+
+            if (diff > 0) {
+                // Swiped Left (move to next slide)
+                nextSlide();
+            } else {
+                // Swiped Right (move to previous slide)
+                prevSlide();
+            }
+        }
+
+
+        // -----------------------------------------------------------
+        // MANUAL NAVIGATION LOGIC
+        // -----------------------------------------------------------
 
         nextBtn.addEventListener("click", () => {
             nextSlide();
